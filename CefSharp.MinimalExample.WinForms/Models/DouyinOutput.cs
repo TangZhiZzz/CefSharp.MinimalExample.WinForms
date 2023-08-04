@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CefSharp.MinimalExample.WinForms.Models
 {
-    public class DouyinOutput
+    public class WorkOutput
     {
         public string NickName { get; set; }
         public string Description { get; set; }
@@ -26,7 +26,7 @@ namespace CefSharp.MinimalExample.WinForms.Models
                 {
                     return VideoUrl;
                 }
-                return "";
+                return VideoUrl;
             }
         }
         public string Status { get; set; }

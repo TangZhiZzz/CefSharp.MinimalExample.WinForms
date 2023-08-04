@@ -143,6 +143,7 @@
     <Compile Include="Handler\MyResourceRequestHandler.cs" />
     <Compile Include="Models\DouyinModel.cs" />
     <Compile Include="Models\DouyinOutput.cs" />
+    <Compile Include="Models\KuaiShouModel.cs" />
     <Compile Include="Program.cs">
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />

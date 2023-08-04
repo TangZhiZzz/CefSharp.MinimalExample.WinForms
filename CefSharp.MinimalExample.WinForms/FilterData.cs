@@ -1,6 +1,7 @@
 ﻿using CefSharp.MinimalExample.WinForms.Filter;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -25,21 +26,16 @@ namespace CefSharp.MinimalExample.WinForms
         public string Name { get; set; }
         public string Url { get; set; }
         public HttpMethod Method { get; set; } = HttpMethod.GET;
-        public bool HasData { get { return Filter?.Data?.Length > 0; } }
 
-        public Dictionary<UInt64, MyResponseFilter> Filters = new Dictionary<ulong, MyResponseFilter>();
-        public UInt64 Identifier { get; set; }
-        public MyResponseFilter Filter { get; set; }
-        public void AddFilter(UInt64 _Identifier, MyResponseFilter _Filter)
+        public List<FilterRequestResponseData> Filters = new List<FilterRequestResponseData>();
+
+
+        internal void AddFilter(IRequest request, MyResponseFilter fil)
         {
-            //Filter?.Dispose(true);
-            Filters.Add(_Identifier, _Filter);
-            Identifier = _Identifier;
-            Filter = _Filter;
+            Filters.Add(new FilterRequestResponseData(request.Identifier, Encoding.UTF8.GetString(request.PostData.Elements[0].Bytes), fil));
         }
         public void DisposeFilter()
         {
-            Filter?.Dispose(true);
             Filters.Clear();
         }
 
@@ -48,12 +44,26 @@ namespace CefSharp.MinimalExample.WinForms
         {
             if (Disposed)
                 return;
-            Filter?.Dispose(true);
+            Filters.Clear();
             Disposed = true;
         }
-        public override string ToString()
+
+
+    }
+    public class FilterRequestResponseData
+    {
+
+        public FilterRequestResponseData(UInt64 Identifier, string PostDataStr, MyResponseFilter Filter)
         {
-            return $"Name={Name},DataStr={Filter?.DataStr}";
+            this.Identifier = Identifier;
+            this.PostDataStr = PostDataStr;
+            this.Filter = Filter;
         }
+        public UInt64 Identifier { get; set; }
+        public IPostData PostData { get; set; }
+
+        public string PostDataStr { get; set; }
+
+        public MyResponseFilter Filter { get; set; }
     }
 }

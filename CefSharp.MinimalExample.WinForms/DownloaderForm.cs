@@ -22,7 +22,7 @@ namespace CefSharp.MinimalExample.WinForms
             dataGridView1.AutoGenerateColumns = false;
         }
 
-        public List<DouyinOutput> douyinOutputs;
+        public List<WorkOutput> douyinOutputs;
 
 
         private void DownloaderForm_Load(object sender, EventArgs e)
@@ -43,7 +43,7 @@ namespace CefSharp.MinimalExample.WinForms
         private async void 下载DToolStripMenuItem_Click(object sender, EventArgs e)
         {
             // 同时下载多个对象，最多允许4个并发下载
-            string saveDirectory = Path.Combine(Application.StartupPath, "douyinDownloads");
+            string saveDirectory = Path.Combine(Application.StartupPath, "Downloads");
             SemaphoreSlim semaphore = new SemaphoreSlim(4); // 设置允许的最大并发数
             var downloadTasks = new List<Task>();
             var dataGridView1SelectedRows = dataGridView1.SelectedRows.Cast<DataGridViewRow>().ToList();
@@ -90,6 +90,10 @@ namespace CefSharp.MinimalExample.WinForms
             {
                 await DownloadImagesWithProgress(row, savePath);
             }
+            else
+            {
+                await DownloadVideoWithProgress(row, savePath);
+            }
         }
 
         // 下载视频并更新进度
@@ -104,7 +108,7 @@ namespace CefSharp.MinimalExample.WinForms
                     row.Cells["Status"].Value = $"Downloading video... {percentage:F2}%";
                 };
                 var filePath = Path.Combine(savePath, row.Cells["Description"].Value.ToString().Replace("\r", "").Replace("\n", "") + ".mp4");
-                if (!File.Exists(filePath))
+                if (!File.Exists(filePath)&&!string.IsNullOrEmpty(videoUrl))
                 {
                     var data = await client.DownloadDataTaskAsync(videoUrl);
                     File.WriteAllBytes(filePath, data);
@@ -133,7 +137,7 @@ namespace CefSharp.MinimalExample.WinForms
                 {
 
                     var filePath = Path.Combine(savePath, Path.Combine(savePath, row.Cells["Description"].Value.ToString().Replace("\\", "").Replace("\r", "").Replace("\n", "") + downloadedCount + ".jpg"));
-                    if (!File.Exists(filePath))
+                    if (!File.Exists(filePath) && !string.IsNullOrEmpty(imageUrl))
                     {
                         var data = await client.DownloadDataTaskAsync(imageUrl);
                         File.WriteAllBytes(filePath, data);

@@ -27,11 +27,13 @@ namespace CefSharp.MinimalExample.WinForms
 #endif
         private readonly string title = "CefSharp.MinimalExample.WinForms (" + Build + ")";
         private readonly ChromiumWebBrowser browser;
+
+        MyRequestHandler MyRequestHandler;
         Dictionary<string, string> FilterUrls = new Dictionary<string, string>()
         {
-                {"douyinapi","https://www.douyin.com/aweme/v1/web/aweme/post" },
+            {"douyinapi","https://www.douyin.com/aweme/v1/web/aweme/post" },
+            {"kuaishouapi","https://www.kuaishou.com/graphql" },
         };
-        MyRequestHandler MyRequestHandler;
         public BrowserForm()
         {
             InitializeComponent();
@@ -39,7 +41,8 @@ namespace CefSharp.MinimalExample.WinForms
             Text = title;
             WindowState = FormWindowState.Maximized;
 
-            browser = new ChromiumWebBrowser("https://www.douyin.com/user/MS4wLjABAAAAd4IEE9JOezbMuKOhRFAEAwlN3D5qgBDvTjjqV2g5FHM?is_search=0&list_name=follow&nt=0");
+            //browser = new ChromiumWebBrowser("https://www.douyin.com/user/MS4wLjABAAAAd4IEE9JOezbMuKOhRFAEAwlN3D5qgBDvTjjqV2g5FHM?is_search=0&list_name=follow&nt=0");
+            browser = new ChromiumWebBrowser("https://www.kuaishou.com/profile/3xr8n69a72wdrtq");
             toolStripContainer.ContentPanel.Controls.Add(browser);
 
             browser.IsBrowserInitializedChanged += OnIsBrowserInitializedChanged;
@@ -49,12 +52,12 @@ namespace CefSharp.MinimalExample.WinForms
             browser.TitleChanged += OnBrowserTitleChanged;
             browser.AddressChanged += OnBrowserAddressChanged;
             browser.LoadError += OnBrowserLoadError;
-
+            browser.LifeSpanHandler = new LifeSpanHandler();
 
 
             #region  自定义捕获或过滤
             //new有很多重载方法，由于我这次用默认全是GET，所以没有定义请求类型
-            MyRequestHandler = new MyRequestHandler(FilterUrls);
+            MyRequestHandler = new MyRequestHandler(FilterUrls,HttpMethod.None);
             browser.RequestHandler = MyRequestHandler;
             #endregion
 
@@ -278,7 +281,7 @@ namespace CefSharp.MinimalExample.WinForms
 
         private void ConsoleDouyinApiToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var douyinOutputList = new List<DouyinOutput>();
+            var douyinOutputList = new List<WorkOutput>();
             var str = MyRequestHandler.ToString();
             //提取某一个url拦截的数据
             var fd = MyRequestHandler.Filters.FindAll(f => f.Name == "douyinapi" || f.Name == "douyinuser");
@@ -287,8 +290,8 @@ namespace CefSharp.MinimalExample.WinForms
             {
                 foreach (var item in filterData.Filters)
                 {
-                    Console.WriteLine(item.Value.DataStr.ToString());
-                    var data = JsonSerializer.Deserialize<DouyinModel.Root>(item.Value.DataStr);
+                    Console.WriteLine(item.Filter.DataStr.ToString());
+                    var data = JsonSerializer.Deserialize<DouyinModel.Root>(item.Filter.DataStr);
                     var douyinoutput = data.aweme_list.Select(m => m.ToDouyinOutput());
                     douyinOutputList.AddRange(douyinoutput);
                 }
@@ -299,6 +302,62 @@ namespace CefSharp.MinimalExample.WinForms
                 {
                     DownloaderForm downloaderForm = new DownloaderForm();
                     downloaderForm.douyinOutputs = douyinOutputList;
+                    downloaderForm.Show();
+
+                }
+            }
+        }
+
+        private void AddDouyinApiToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            //Dictionary<string, string> FilterUrls = new Dictionary<string, string>()
+            //{
+            //    {"douyinapi","https://www.douyin.com/aweme/v1/web/aweme/post" },
+            //};
+            //#region  自定义捕获或过滤
+            ////new有很多重载方法，由于我这次用默认全是GET，所以没有定义请求类型
+            //MyRequestHandler = new MyRequestHandler(FilterUrls);
+            //browser.RequestHandler = MyRequestHandler;
+            //#endregion
+        }
+
+        private void AddKuaiShouApiToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            //Dictionary<string, string> FilterUrls = new Dictionary<string, string>()
+            //{
+            //    {"kuaishouapi","https://www.kuaishou.com/graphql" },
+            //};
+            //#region  自定义捕获或过滤
+            ////new有很多重载方法，由于我这次用默认全是GET，所以没有定义请求类型
+            //MyRequestHandler = new MyRequestHandler(FilterUrls,HttpMethod.POST);
+            //browser.RequestHandler = MyRequestHandler;
+            //#endregion
+        }
+
+        private void ConsoleKuaiShouApiToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var kuaishouOutputList = new List<WorkOutput>();
+            var str = MyRequestHandler.ToString();
+            //提取某一个url拦截的数据
+            var fd = MyRequestHandler.Filters.FindAll(f => f.Name == "kuaishouapi");
+            FilterData filterData = fd.FirstOrDefault(f => f.Name == "kuaishouapi");
+            var filters = filterData.Filters.Where(f => f.PostDataStr.Contains("visionProfilePhotoList")).ToList();
+            if (filterData != null)
+            {
+                foreach (var item in filters)
+                {
+                    Console.WriteLine(item.Filter.DataStr.ToString());
+                    var data = JsonSerializer.Deserialize<KuaiShouModel.Root>(item.Filter.DataStr);
+                    var douyinoutput = data.data.visionProfilePhotoList.feeds.Select(m => m.ToDouyinOutput());
+                    kuaishouOutputList.AddRange(douyinoutput);
+                }
+            }
+            if (kuaishouOutputList.Count > 0)
+            {
+                if (MessageBox.Show(string.Format("共拦截{0}作品，是否跳转至下载？", kuaishouOutputList.Count)) == DialogResult.OK)
+                {
+                    DownloaderForm downloaderForm = new DownloaderForm();
+                    downloaderForm.douyinOutputs = kuaishouOutputList;
                     downloaderForm.Show();
 
                 }

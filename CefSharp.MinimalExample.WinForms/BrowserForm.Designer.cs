@@ -44,6 +44,9 @@
             this.douyinToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.AddDouyinApiToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ConsoleDouyinApiToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.kuaiShouToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.AddKuaiShouApiToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.ConsoleKuaiShouApiToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripContainer.ContentPanel.SuspendLayout();
             this.toolStripContainer.TopToolStripPanel.SuspendLayout();
             this.toolStripContainer.SuspendLayout();
@@ -130,6 +133,7 @@
             // urlTextBox
             // 
             this.urlTextBox.AutoSize = false;
+            this.urlTextBox.Font = new System.Drawing.Font("Microsoft YaHei UI", 9F);
             this.urlTextBox.Name = "urlTextBox";
             this.urlTextBox.Size = new System.Drawing.Size(500, 25);
             this.urlTextBox.KeyUp += new System.Windows.Forms.KeyEventHandler(this.UrlTextBoxKeyUp);
@@ -147,7 +151,8 @@
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
-            this.douyinToolStripMenuItem});
+            this.douyinToolStripMenuItem,
+            this.kuaiShouToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(730, 25);
@@ -189,15 +194,39 @@
             // AddDouyinApiToolStripMenuItem
             // 
             this.AddDouyinApiToolStripMenuItem.Name = "AddDouyinApiToolStripMenuItem";
-            this.AddDouyinApiToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
+            this.AddDouyinApiToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.AddDouyinApiToolStripMenuItem.Text = "添加拦截";
+            this.AddDouyinApiToolStripMenuItem.Click += new System.EventHandler(this.AddDouyinApiToolStripMenuItem_Click);
             // 
             // ConsoleDouyinApiToolStripMenuItem
             // 
             this.ConsoleDouyinApiToolStripMenuItem.Name = "ConsoleDouyinApiToolStripMenuItem";
-            this.ConsoleDouyinApiToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
+            this.ConsoleDouyinApiToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.ConsoleDouyinApiToolStripMenuItem.Text = "输出拦截";
             this.ConsoleDouyinApiToolStripMenuItem.Click += new System.EventHandler(this.ConsoleDouyinApiToolStripMenuItem_Click);
+            // 
+            // kuaiShouToolStripMenuItem
+            // 
+            this.kuaiShouToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.AddKuaiShouApiToolStripMenuItem,
+            this.ConsoleKuaiShouApiToolStripMenuItem});
+            this.kuaiShouToolStripMenuItem.Name = "kuaiShouToolStripMenuItem";
+            this.kuaiShouToolStripMenuItem.Size = new System.Drawing.Size(74, 21);
+            this.kuaiShouToolStripMenuItem.Text = "KuaiShou";
+            // 
+            // AddKuaiShouApiToolStripMenuItem
+            // 
+            this.AddKuaiShouApiToolStripMenuItem.Name = "AddKuaiShouApiToolStripMenuItem";
+            this.AddKuaiShouApiToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.AddKuaiShouApiToolStripMenuItem.Text = "添加拦截";
+            this.AddKuaiShouApiToolStripMenuItem.Click += new System.EventHandler(this.AddKuaiShouApiToolStripMenuItem_Click);
+            // 
+            // ConsoleKuaiShouApiToolStripMenuItem
+            // 
+            this.ConsoleKuaiShouApiToolStripMenuItem.Name = "ConsoleKuaiShouApiToolStripMenuItem";
+            this.ConsoleKuaiShouApiToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.ConsoleKuaiShouApiToolStripMenuItem.Text = "输出拦截";
+            this.ConsoleKuaiShouApiToolStripMenuItem.Click += new System.EventHandler(this.ConsoleKuaiShouApiToolStripMenuItem_Click);
             // 
             // BrowserForm
             // 
@@ -242,5 +271,8 @@
         private System.Windows.Forms.ToolStripMenuItem douyinToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem ConsoleDouyinApiToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem AddDouyinApiToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem kuaiShouToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem AddKuaiShouApiToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem ConsoleKuaiShouApiToolStripMenuItem;
     }
 }

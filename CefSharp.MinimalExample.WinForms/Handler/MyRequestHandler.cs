@@ -11,6 +11,10 @@ namespace CefSharp.MinimalExample.WinForms.Handler
 {
     internal class MyRequestHandler : IRequestHandler, IDisposable
     {
+        public MyRequestHandler()
+        {
+
+        }
         public void Dispose()
         {
             if (Disposed)

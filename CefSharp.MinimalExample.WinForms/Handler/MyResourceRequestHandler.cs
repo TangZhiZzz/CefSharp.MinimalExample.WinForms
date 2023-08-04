@@ -47,7 +47,7 @@ namespace CefSharp.MinimalExample.WinForms.Handler
         public IResponseFilter GetResourceResponseFilter(IWebBrowser chromiumWebBrowser, IBrowser browser, IFrame frame, IRequest request, IResponse response)
         {
             var fil = new MyResponseFilter(filter);
-            filterData.AddFilter(request.Identifier, fil);
+            filterData.AddFilter(request, fil);
             return fil;
 
         }
@@ -72,10 +72,7 @@ namespace CefSharp.MinimalExample.WinForms.Handler
 
         public bool OnResourceResponse(IWebBrowser chromiumWebBrowser, IBrowser browser, IFrame frame, IRequest request, IResponse response)
         {
-            if (request.Url.Contains("https://www.douyin.com/aweme/v1/web/aweme/post/"))
-            {
-                Console.WriteLine("douyinapi:" + request.Url);
-            }
+           
             return false;
         }
     }

@@ -79,15 +79,15 @@ namespace CefSharp.MinimalExample.WinForms.Models
             public List<ImagesItem> images { get; set; }
           
 
-            internal DouyinOutput ToDouyinOutput()
+            internal WorkOutput ToDouyinOutput()
             {
-                DouyinOutput douyinOutput = new DouyinOutput();
-                douyinOutput.NickName = this.author.nickname;
-                douyinOutput.Description = this.desc;
-                douyinOutput.Type = this.media_type;
+                WorkOutput workOutput = new WorkOutput();
+                workOutput.NickName = this.author.nickname;
+                workOutput.Description = this.desc;
+                workOutput.Type = this.media_type;
                 if (this.media_type == 2)
                 {
-                    douyinOutput.ImageUrlList = new List<string>();
+                    workOutput.ImageUrlList = new List<string>();
                     foreach (var item in this.images)
                     {
                         var url = item.url_list.FirstOrDefault();
@@ -95,14 +95,14 @@ namespace CefSharp.MinimalExample.WinForms.Models
                         {
                             url = "http://" + url;
                         }
-                        douyinOutput.ImageUrlList.Add(url);
+                        workOutput.ImageUrlList.Add(url);
                     }
                 }
                 else if (this.media_type == 4)
                 {
-                    douyinOutput.VideoUrl=this.video.play_addr.url_list.FirstOrDefault();
+                    workOutput.VideoUrl=this.video.play_addr.url_list.FirstOrDefault();
                 }
-                return douyinOutput;
+                return workOutput;
             }
         }
 
